@@ -1,7 +1,8 @@
 body{
     background-color: #f5efeb;
     color: #3b2a1e;
-   
+    max-width: 60rem;
+    margin: 0 auto;
 }
 
 
@@ -27,7 +28,7 @@ p {
     background: #fffaf3;
     padding: 1.25rem  0.25rem;
     margin: 10px;
-    border-radius: 3px solid #2b2b2b;
+    border-radius: 3px;
     border: 1px solid #e0d3c0;
     box-shadow: 0 4px 12px rgba( 0, 0, 0, 0.12); 
     
@@ -39,10 +40,15 @@ p {
     border: none;
     padding: 8px 16px;
     border-radius: 999px;
+    transition: transform 0.3s;
+}
+
+.card:hover .btn {
+    transform: translateX(300px);
 }
 
 .card.destaque {
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.06);
+border: 3px solid #c9a227;
 
 }
     
