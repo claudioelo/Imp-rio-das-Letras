@@ -27,7 +27,7 @@ p {
     background: #fffaf3;
     padding: 1.25rem  0.25rem;
     margin: 10px;
-    border-radius: 8px;
+    border-radius: 3px solid #2b2b2b;
 }
 
 .btn {
@@ -35,7 +35,7 @@ p {
     color: #ffffff;
     border: none;
     padding: 8px 16px;
-    border-radius: 4px;
+    border-radius: 999px;
 }
 
 .card.destaque {
