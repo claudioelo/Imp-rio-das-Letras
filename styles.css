@@ -1,5 +1,7 @@
 body{
-    background: #f5efe6;
+    background-color: #f5efeb;
+    color: #3b2a1e;
+   
 }
 
 
@@ -23,7 +25,7 @@ p {
 
 .card {
     background: #fffaf3;
-    padding: 20px;
+    padding: 1.25rem  0.25rem;
     margin: 10px;
     border-radius: 8px;
 }
