@@ -31,6 +31,7 @@ p {
     border-radius: 3px;
     border: 1px solid #e0d3c0;
     box-shadow: 0 4px 12px rgba( 0, 0, 0, 0.12); 
+    width: 100%;
     
 }
 
