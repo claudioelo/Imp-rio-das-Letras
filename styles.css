@@ -11,14 +11,19 @@ body {
     max-width: 60rem;
     margin: 0 auto;
     font-family: "Segoe UI", roboto, Arial, sans-serif;
+    line-height: 1.6;
 }
 
+h1, h2 {
+    line-height: 1.2;
+}
 
 h1 {
     color: #8b3e2d;
     text-align: center;
     border-bottom: 3px solid #8b3a2b;
     font-size: 2.5rem;
+    font-family: Georgia, "Times New Roman", serif;
 }
 
 h2 {
@@ -26,7 +31,6 @@ h2 {
     text-align: center;
     font-style: italic;
     font-size: 1.35rem;
-
 }
 
 p {
@@ -37,13 +41,15 @@ p {
 
 .card {
     background: #fffaf3;
-    padding: 1.25rem 0.25rem;
+    padding: 1.25rem;
     margin: 10px;
     border-radius: 3px;
     border: 1px solid #e0d3c0;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
-    width: 100%;
+}
 
+.card p {
+    font-size: 0.95rem;
 }
 
 .btn {
@@ -54,13 +60,13 @@ p {
     border-radius: 999px;
     transition: transform 0.3s;
     font-size: 0.875rem;
+    font-family: inherit;
 }
 
 .card:hover .btn {
-    transform: translateX(300px);
+    transform: translateX(250px);
 }
 
 .card.destaque {
     border: 3px solid #c9a227;
-
 }
