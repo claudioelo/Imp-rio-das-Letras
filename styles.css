@@ -54,10 +54,14 @@ p {
     color: #6b4f3f;
 }
 
-.card.destaque {
-    
-    border: 3px solid #c9a227;   
-   
+.card.destaque {    
+    border: 3px solid #c9a227;        
+}
+
+.card-container{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
 }
 
 .btn {
@@ -79,6 +83,7 @@ p {
 .btn-container {
     display: flex;
     gap: 0.5rem;
+ 
     justify-content: space-between;
     margin: 0 10px;
     align-items: center;
