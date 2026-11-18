@@ -5,18 +5,18 @@
 }
 
 :root {
-    --color-bg: #f5efeb;          /* fundo da página */
-    --color-surface: #fffaf3;     /* fundo dos cards */
-    --color-border: #e0d3c0;      /* borda dos cards */
-    --color-text: #3b2a1e;        /* texto base */
-    --color-text-muted: #6b4f3f;  /* sinopse */
-    --color-paragraph: #790404;   /* parágrafos vinho */
-    --color-heading: #8b3e2d;     /* h1 */
-    --color-accent: #d1715c;      /* h2, títulos dos livros */
-    --color-brand: #8b3a2b;       /* botões e linha do h1 */
-    --color-on-brand: #ffffff;    /* texto em cima da marca */
-    --color-primary: #2f5d50;     /* finalizar compra */
-    --color-highlight: #c9a227;   /* dourado: destaque e foco */
+    --color-bg: #f5efeb;
+    --color-surface: #fffaf3;
+    --color-border: #e0d3c0;
+    --color-text: #3b2a1e;
+    --color-text-muted: #6b4f3f;
+    --color-paragraph: #790404;
+    --color-heading: #8b3e2d;
+    --color-accent: #d1715c;
+    --color-brand: #8b3a2b;
+    --color-on-brand: #ffffff;
+    --color-primary: #2f5d50;
+    --color-highlight: #c9a227;
 }
 
 body {
@@ -117,4 +117,29 @@ p {
 .btn:focus-visible {
     outline: 3px solid var(--color-highlight);
     outline-offset: 3px;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --color-bg: #1f1a17;
+        --color-surface: #2a231f;
+        --color-border: #3d332c;
+        --color-text: #f0e6d8;
+        --color-text-muted: #c9b8a6;
+        --color-paragraph: #e8b4a8;
+        --color-heading: #e8a48f;
+        --color-accent: #f0a58e;
+        --color-brand: #a8462f;
+        --color-on-brand: #ffffff;
+        --color-primary: #2f6b5a;
+        --color-highlight: #d4b03a;
+    }
+
+    .btn:hover {
+        background: #bd5640;
+    }
+
+    .btn.btn-primary:hover {
+        background: #3a7d6a;
+    }
 }
