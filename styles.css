@@ -95,10 +95,9 @@ p {
 
 .btn-container {
     display: flex;
+    flex-direction: column;
     gap: 0.5rem;
-    justify-content: space-between;
     margin: 0 10px;
-    align-items: center;
 }
 
 .btn:hover {
@@ -141,5 +140,13 @@ p {
 
     .btn.btn-primary:hover {
         background: #3a7d6a;
+    }
+}
+
+@media (min-width: 25rem) {
+    .btn-container {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
     }
 }
