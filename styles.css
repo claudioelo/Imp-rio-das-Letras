@@ -4,9 +4,24 @@
     box-sizing: border-box;
 }
 
+:root {
+    --color-bg: #f5efeb;          /* fundo da página */
+    --color-surface: #fffaf3;     /* fundo dos cards */
+    --color-border: #e0d3c0;      /* borda dos cards */
+    --color-text: #3b2a1e;        /* texto base */
+    --color-text-muted: #6b4f3f;  /* sinopse */
+    --color-paragraph: #790404;   /* parágrafos vinho */
+    --color-heading: #8b3e2d;     /* h1 */
+    --color-accent: #d1715c;      /* h2, títulos dos livros */
+    --color-brand: #8b3a2b;       /* botões e linha do h1 */
+    --color-on-brand: #ffffff;    /* texto em cima da marca */
+    --color-primary: #2f5d50;     /* finalizar compra */
+    --color-highlight: #c9a227;   /* dourado: destaque e foco */
+}
+
 body {
-    background-color: #f5efeb;
-    color: #3b2a1e;
+    background-color: var(--color-bg);
+    color: var(--color-text);
     max-width: 60rem;
     margin: 0 auto;
     padding: 0 1rem;
@@ -19,75 +34,71 @@ h1, h2 {
 }
 
 h1 {
-    color: #8b3e2d;
+    color: var(--color-heading);
     text-align: center;
-    border-bottom: 3px solid #8b3a2b;
+    border-bottom: 3px solid var(--color-brand);
     font-size: 2.5rem;
     font-family: Georgia, "Times New Roman", serif;
     letter-spacing: -0.01em;
 }
 
 h2 {
-    color: #d1715c;
+    color: var(--color-accent);
     text-align: center;
     font-style: italic;
     font-size: 1.35rem;
 }
 
 p {
-    color: #790404;
+    color: var(--color-paragraph);
     text-align: center;
     font-size: 1rem;
 }
 
 .card {
-    background: #fffaf3;
+    background: var(--color-surface);
     padding: 1.25rem;
     margin: 10px;
     border-radius: 3px;
-    border: 1px solid #e0d3c0;
+    border: 1px solid var(--color-border);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
 }
 
 .card p {
     font-size: 0.95rem;
-    color: #6b4f3f;
+    color: var(--color-text-muted);
 }
 
-.card.destaque {    
-    border: 3px solid #c9a227;        
+.card.destaque {
+    border: 3px solid var(--color-highlight);
 }
 
-.card-container{
+.card-container {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 1rem;
 }
 
 .btn {
-   
-    background: #8b3a2b;
-    color: #ffffff;
+    background: var(--color-brand);
+    color: var(--color-on-brand);
     border: none;
     padding: 8px 16px;
-    border-radius: 999px;   
+    border-radius: 999px;
     font-size: 0.875rem;
     font-family: inherit;
     text-transform: uppercase;
     letter-spacing: 0.08em;
     font-weight: 600;
     transition: transform 180ms ease-out, background-color 180ms ease-out;
-   
 }
 
 .btn-container {
     display: flex;
     gap: 0.5rem;
- 
     justify-content: space-between;
     margin: 0 10px;
     align-items: center;
-
 }
 
 .btn:hover {
@@ -96,21 +107,14 @@ p {
 }
 
 .btn-primary {
-    background: #2f5d50;
- 
+    background: var(--color-primary);
 }
 
 .btn.btn-primary:hover {
     background: #234840;
 }
 
-.card:hover .btn {
-    transform: translateX(200px);
-}
-
 .btn:focus-visible {
-    outline:3px solid #c9a227;
+    outline: 3px solid var(--color-highlight);
     outline-offset: 3px;
-    
-    
 }
