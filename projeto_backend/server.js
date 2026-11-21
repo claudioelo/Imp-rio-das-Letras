@@ -18,45 +18,61 @@ const livros = [
     },
 ];
 
+const carrinho = [];
+
 const servidor = http.createServer((req, res) => {
     const [caminho, query] = req.url.split("?");  //"/livros?autor=ana" -> "/livros" + "autor=ana"
     const params = new URLSearchParams(query || "");
     const partes = caminho.split("/"); // ["", "livros", "sally-adventure-book"]
+    const json = { "Content-Type": "application/json; charset=utf-8" };
 
+    if (caminho === "/" && req.method === "GET") {
+        res.writeHead(200, { "Content-Type": "text/plain; charset=utf-8" });
+        return res.end("Bem-vindo a API da XYZ Bookstore");
+    }
 
-    let corpo;
-    let status = 200;
-    let tipo = "application/json; charset=utf-8";
-
-
-
-    if (caminho === "/") {
-        tipo = "text/plain; charset=utf-8";
-        corpo = "Bem-vindo a API da XYZ Bookstore";
-    } else if (caminho === "/livros") {
-        const autor = params.get("autor"); //null se não veio
+    if (caminho === "/livros" && req.method === "GET") {
+        const autor = params.get("autor");
         const lista = autor
             ? livros.filter((livro) => livro.autor.toLowerCase().includes(autor.toLowerCase()))
             : livros;
-        corpo = JSON.stringify(lista);
-    } else if (partes[1] === "livros" && partes[2]) {
-    const livro = livros.find((l) => l.id === partes[2]);
-    if (livro) {
-        corpo = JSON.stringify(livro);
-    } else {
-        status = 404;
-        corpo = JSON.stringify({ erro: "livro nao encontrado" });
+        res.writeHead(200, json);
+        return res.end(JSON.stringify(lista));
     }
-} else if (caminho === "/carrinho") {
-    tipo = "text/plain; charset=utf-8";
-    corpo = "Rota do carrinho - em construcao";
-} else {
-    status = 404;
-    corpo = JSON.stringify({ erro: "rota inexistente" });
-}
 
-res.writeHead(status, { "Content-Type": tipo });
-res.end(corpo);
+    if (partes[1] === "livros" && partes[2] && req.method === "GET") {
+        const livro = livros.find((item) => item.id === partes[2]);
+        if (livro) {
+          res.writeHead(200, json);
+          return res.end(JSON.stringify(livro));
+        } 
+        res.writeHead(404, json);
+        return res.end(JSON.stringify({ erro: "livro nao encontrado"}));        
+    
+    }
+    
+    if (caminho === "/carrinho" &&  req.method === "GET") {
+        res.writeHead(200, json);
+        return res.end(JSON.stringify(carrinho));    
+    } 
+    
+    if (caminho === "/carrinho" && req.method === "POST") {
+        let bruto = "";
+        req.on("data", (pedaco) => {
+            bruto += pedaco;
+        });
+        req.on("end", () => {
+            const item = JSON.parse(bruto);
+            carrinho.push(item);
+            res.writeHead(200,json);
+            res.end(JSON.stringify({carrinho}));
+
+        });
+        return;     
+    }
+
+    res.writeHead(404, json);
+    res.end(JSON.stringify({erro: "rota inexistente"}));
 });
 
 servidor.listen(3000);
