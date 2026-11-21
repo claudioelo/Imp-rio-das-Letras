@@ -1,42 +1,51 @@
 const http = require("node:http");
 
-
 const livros = [
-    {titulo: "A Aventura de Sally", autor: "Ana Ribeiro", preco: 39.9},
-    {titulo: "A Aventura Culinária de Dave", autor: "Carlos Mendes", preco: 49.9},
+  {
+    id: "sally-adventure-book",
+    titulo: "A Aventura de Sally",
+    autor: "Ana Ribeiro",
+    descricao: "Uma história épica de Sally e seu cachorro Rex enquanto eles viajam por outros mundos.",
+    preco: 39.9,
+  },
+  {
+    id: "dave-cooking-book",
+    titulo: "A Aventura Culinária de Dave",
+    autor: "Carlos Mendes",
+    descricao: "A história de David, que aprende a preparar de tudo, de panquecas a massas, uma receita de cada vez.",
+    preco: 49.9,
+  },
 ];
 
 const servidor = http.createServer((req, res) => {
-    //console.log("Pedido recebido em: " + req.url);
+  const partes = req.url.split("/"); // ["", "livros", "sally-adventure-book"]
+  let corpo;
+  let status = 200;
+  let tipo = "application/json; charset=utf-8";
 
-    let mensagem;
-    let status;
-    let tipo
+  if (req.url === "/") {
+    tipo = "text/plain; charset=utf-8";
+    corpo = "Bem-vindo a API da XYZ Bookstore";
+  } else if (req.url === "/livros") {
+    corpo = JSON.stringify(livros);
+  } else if (partes[1] === "livros" && partes[2]) {
+    const livro = livros.find((l) => l.id === partes[2]);
+    if (livro) {
+      corpo = JSON.stringify(livro);
+    } else {
+      status = 404;
+      corpo = JSON.stringify({ erro: "livro nao encontrado" });
+    }
+  } else if (req.url === "/carrinho") {
+    tipo = "text/plain; charset=utf-8";
+    corpo = "Rota do carrinho - em construcao";
+  } else {
+    status = 404;
+    corpo = JSON.stringify({ erro: "rota inexistente" });
+  }
 
-
-    if (req.url === "/") {
-        status =200;
-        tipo =  "text/plain; charset=utf-8";
-        mensagem = "Bem-vindo a API da XYZ Bookstore";
-
-    }else if (req.url === "/livros") {
-        status = 200;
-        tipo = "application/json; charset=utf-8";
-        mensagem = JSON.stringify(livros);
-
-    }else if (req.url === "/carrinho") {
-        status = 200;
-        tipo = "text/plain; charset=utf-8"; 
-        mensagem = "Rota do carrinho - em construcao";
-
-    }else {
-        status = 404;
-        tipo = "application/json; charset=utf-8";
-        mensagem = JSON.stringify({ erro: "rota inexistente"});
-    }    
-
-    res.writeHead(status, { "Content-Type": tipo });
-    res.end(mensagem);
+  res.writeHead(status, { "Content-Type": tipo });
+  res.end(corpo);
 });
 
 servidor.listen(3000);
