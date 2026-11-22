@@ -78,7 +78,13 @@ app.post("/carrinho", (req, res) => {
 
     const item = { livroId: dados.livroId, quantidade: dados.quantidade };
     carrinho.push(item);
-    res.status(201).json({ item, carrinho });
+    const itemPronto = {
+        ...item,
+        titulo: livro.titulo,
+        preco: livro.preco,
+        subtotal: livro.preco * item.quantidade,
+    };
+    res.status(201).json({ item: itemPronto, carrinho: montarItens() });
 });
 
 app.post("/checkout", (req, res) => {
