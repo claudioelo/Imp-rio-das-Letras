@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Teste CORS</title>
+</head>
+<body>
+  <h1>Teste da API</h1>
+  <button id="botao-post">Adicionar Sally ao carrinho (POST)</button>
+
+  <script>
+    // GET: ler os livros
+    fetch("http://localhost:3000/livros")
+      .then((resposta) => resposta.json())
+      .then((dados) => document.body.insertAdjacentHTML("beforeend", "<pre>" + JSON.stringify(dados, null, 2) + "</pre>"))
+      .catch((erro) => console.log("BLOQUEADO (ou API fora do ar):", erro.message));
+
+    // POST: adicionar no carrinho
+    document.getElementById("botao-post").addEventListener("click", () => {
+      fetch("http://localhost:3000/carrinho", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: '{"livroId":"sally-adventure-book","quantidade":1}',
+      })
+        .then((resposta) => {
+          console.log("Status do POST:", resposta.status);
+          return resposta.json();
+        })
+        .then((dados) => console.log("Resposta:", dados))
+        .catch((erro) => console.log("POST BLOQUEADO:", erro.message));
+    });
+  </script>
+</body>
+</html>
