@@ -20,59 +20,87 @@ const livros = [
 
 const carrinho = [];
 
+function enviar(res, status, corpo) {
+    res.writeHead(status, { "Content-Type": "application/json; charset=utf-8" });
+    res.end(JSON.stringify(corpo));
+}
+
+function adicionarAoCarrinho(req, res) {
+    let bruto = "";
+    req.on("data", (pedaco) => {
+        bruto += pedaco;
+    });
+    req.on("end", () => {
+        let dados;
+        try {
+            dados = JSON.parse(bruto); //camada 1: é JSON?
+        } catch {
+            return enviar(res, 400, {erro: "corpo nao e JSON valido" });
+        }
+
+        if (!dados || typeof dados !==  "object") {
+            return enviar(res, 400, { erro: "corpo deve ser um objeto com livroId e quantidade" });
+        }
+
+        const faltando = []; //camada 2: campos obrigatórios?
+        if (!dados.livroId) faltando.push("livroId");
+        if (dados.quantidade === undefined) faltando.push("quantidade");
+        if (faltando.length > 0) {
+
+            return enviar(res, 400, { erro: "faltam campos: " + faltando.join(", ") });
+        }
+
+        const  livro = livros.find((item) => item.id === dados.livroId); // camada 3: o livro existe?
+        if (!livro) {
+            return enviar(res, 400, { erro: "livro inexistente: " + dados.livroId });
+        }
+
+        if (!(Number.isInteger(dados.quantidade) && dados.quantidade > 0)) { // camada 4: quantidade
+            return enviar(res, 400, { erro: "quantidade deve ser um numero inteiro maior que zero" });
+        }
+
+        const item = { livroId: dados.livroId, quantidade: dados.quantidade };
+        carrinho.push(item);
+        enviar(res, 201, { item, carrinho }); // criou -> 201
+    });
+}
+
 const servidor = http.createServer((req, res) => {
     const [caminho, query] = req.url.split("?");  //"/livros?autor=ana" -> "/livros" + "autor=ana"
     const params = new URLSearchParams(query || "");
     const partes = caminho.split("/"); // ["", "livros", "sally-adventure-book"]
-    const json = { "Content-Type": "application/json; charset=utf-8" };
-
+    
     if (caminho === "/" && req.method === "GET") {
-        res.writeHead(200, { "Content-Type": "text/plain; charset=utf-8" });
-        return res.end("Bem-vindo a API da XYZ Bookstore");
+        return enviar(res, 200, { mensagem: "Bem-vindo a API da XYZ Bookstore" });
     }
 
     if (caminho === "/livros" && req.method === "GET") {
         const autor = params.get("autor");
         const lista = autor
             ? livros.filter((livro) => livro.autor.toLowerCase().includes(autor.toLowerCase()))
-            : livros;
-        res.writeHead(200, json);
-        return res.end(JSON.stringify(lista));
+            : livros;      
+        return enviar(res, 200, lista);
     }
 
     if (partes[1] === "livros" && partes[2] && req.method === "GET") {
         const livro = livros.find((item) => item.id === partes[2]);
-        if (livro) {
-          res.writeHead(200, json);
-          return res.end(JSON.stringify(livro));
+        if (livro) {          
+          return enviar(res, 200, livro);
         } 
-        res.writeHead(404, json);
-        return res.end(JSON.stringify({ erro: "livro nao encontrado"}));        
+     
+        return enviar(res, 404, { erro: "livro nao encontrado"});        
     
     }
     
-    if (caminho === "/carrinho" &&  req.method === "GET") {
-        res.writeHead(200, json);
-        return res.end(JSON.stringify(carrinho));    
+    if (caminho === "/carrinho" &&  req.method === "GET") {       
+        return enviar(res, 200, carrinho);    
     } 
     
     if (caminho === "/carrinho" && req.method === "POST") {
-        let bruto = "";
-        req.on("data", (pedaco) => {
-            bruto += pedaco;
-        });
-        req.on("end", () => {
-            const item = JSON.parse(bruto);
-            carrinho.push(item);
-            res.writeHead(200,json);
-            res.end(JSON.stringify({carrinho}));
-
-        });
-        return;     
+       return adicionarAoCarrinho(req, res);
     }
 
-    res.writeHead(404, json);
-    res.end(JSON.stringify({erro: "rota inexistente"}));
+    enviar(res, 404, {erro: "rota inexistente" });
 });
 
 servidor.listen(3000);
