@@ -19,12 +19,25 @@ const livros = [
 ];
 
 const carrinho = [];
+const pedidos = [];
 
 function enviar(res, status, corpo) {
     res.writeHead(status, { "Content-Type": "application/json; charset=utf-8" });
     res.end(JSON.stringify(corpo));
 }
 
+// Junta cada item do carrinho com os dados do livro (titulo, preco, subtotal)
+function  montarItens() {
+    return carrinho.map((itemCarrinho) => {
+        const livro = livros.find((item) => item.id === itemCarrinho.livroId);
+        return{
+            ...itemCarrinho,
+            titulo: livro.titulo,
+            preco: livro.preco,
+            subtotal: livro.preco * itemCarrinho.quantidade,
+        };
+    });
+}
 function adicionarAoCarrinho(req, res) {
     let bruto = "";
     req.on("data", (pedaco) => {
@@ -93,11 +106,27 @@ const servidor = http.createServer((req, res) => {
     }
     
     if (caminho === "/carrinho" &&  req.method === "GET") {       
-        return enviar(res, 200, carrinho);    
+        return enviar(res, 200,montarItens());    
     } 
     
     if (caminho === "/carrinho" && req.method === "POST") {
        return adicionarAoCarrinho(req, res);
+    }
+
+    if (caminho === "/checkout" && req.method === "POST" ) {
+        if (carrinho.length === 0) {
+            return enviar(res, 400, { erro: "carrinho vazio"});
+        }
+        const itens = montarItens();
+        const total = itens.reduce((soma, item) => soma + item.subtotal, 0);
+        const pedido = { numero: Date.now(), itens, total};
+        pedidos.push(pedido);
+        carrinho.length = 0; // esvazia o MESMO array
+        return enviar(res, 200, pedido);
+    }
+
+    if (caminho === "/pedidos" && req.method === "GET") {
+        return enviar(res, 200, pedidos);
     }
 
     enviar(res, 404, {erro: "rota inexistente" });
