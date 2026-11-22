@@ -84,7 +84,7 @@ const servidor = http.createServer((req, res) => {
     const partes = caminho.split("/"); // ["", "livros", "sally-adventure-book"]
     
     if (caminho === "/" && req.method === "GET") {
-        return enviar(res, 200, { mensagem: "Bem-vindo a API da XYZ Bookstore" });
+        return enviar(res, 200, { mensagem: "Bem-vindo a API da XYZ Bookstore - agora com nodemon" });
     }
 
     if (caminho === "/livros" && req.method === "GET") {
