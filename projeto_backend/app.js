@@ -17,10 +17,24 @@ const livros = [
         preco: 49.9,
     },
 ];
-
+// lista (com filtro opcional por autor)
 app.get("/livros", (req, res) => {
-    res.json(livros);
+    const autor = req.query.autor;
+    const lista = autor
+        ? livros.filter((livro) => livro.autor.toLowerCase().includes(autor.toLowerCase()))
+        : livros;
+    res.json(lista);
 
+});
+//datalhe
+app.get("/livros/:id", (req, res) => {
+    const livro = livros.find((item) => item.id === req.params.id);
+    if (!livro) return res.status(404).json({ erro: "livro nao encontrado" });
+    res.json(livro);
+});
+
+app.use((req, res) => {
+    res.status(404).json({ erro: "rota inexistente "});
 });
 
 app.listen(3000, () => console.log("XYZ Bookstore (Express) no ar em http://localhost:3000"));
