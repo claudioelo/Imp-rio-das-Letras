@@ -3,8 +3,6 @@ const cors = require("cors");
 const app = express();
 
 app.use(cors());
-
-
 app.use(express.json()); // lê o corpo JSON e coloca em req.body: ANTES das rotas
 
 const livros = [
@@ -95,6 +93,16 @@ app.post("/checkout", (req, res) => {
     pedidos.push(pedido);
     carrinho.length = 0;
     res.json(pedido);
+});
+
+// remover do carrinho (Step 19)
+app.delete("/carrinho/:id", (req, res) => {
+    const posicao = carrinho.findIndex((item) => item.livroId === req.params.id);
+    if (posicao === -1) {
+        return res.status(404).json({ erro: "item nao esta no carrinho: " + req.params.id });
+    }
+    carrinho.splice(posicao, 1);
+    res.json(montarItens());
 });
 
 app.get("/pedidos", (req, res) => {
